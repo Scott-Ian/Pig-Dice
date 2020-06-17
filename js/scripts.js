@@ -4,6 +4,23 @@
 function Game(player1, player2) {
   this.player1 = player1;
   this.player2 = player2;
+  this.activePlayer;
+}
+
+Game.prototype.switchActivePlayer = function() {
+  if (this.player1.isTurn === true) {
+    this.player1.isTurn = false;
+    this.player1 = this.activePlayer;
+    this.activePlayer = this.player2;
+  } else if (this.player2.isTurn === true) {
+    this.player2.isTurn = false;
+    this.player2 = this.activePlayer;
+    this.activePlayer = this.player1;
+  }
+  else {
+    this.activePlayer = this.player1;
+    this.player1.isTurn = true;
+  }
 }
 
 Game.prototype.winStateCheck = function(playerScore){
@@ -58,44 +75,32 @@ Dice.prototype.rollDice = function() {
 
 
 // UI Logic
-function switchPlayers (player1, player2) {
-  let activePlayer;
-  if (player1.isTurn === true) {
-    player1.isTurn = false;
-    currentPlayer = player2;
-  } else {
-    player2.isTurn = false;
-    currentPlayer = player1;
-  }
-  return activePlayer;
-}
-
-
-$(document).ready(function () {
+$(document).ready(function() {
   let gameStart = false;
   let player1;
   let player2;
   let newGame;
-  let activePlayer;
-
-  $("button#start").click(function () {
+  
+  $("button#start").click(function() {
     player1 = new Player (true, 0, 0)
     player2 = new Player (false, 0, 0)
     newGame = new Game(player1, player2);
     gameStart = true;
+    newGame.activePlayer = newGame.player1;
     $("#play-space").show();
   })
 
-  activePlayer = player1;
-
   $("button#roll").click(function() {
     if (gameStart === true) {
-      player1.dice.currentRoll = player1.dice.rollDice();
-      $("span#current-roll").text(player1.dice.currentRoll);
-      if (player1.isTurnOver() === true) {
+      newGame.activePlayer.dice.currentRoll = newGame.activePlayer.dice.rollDice();
+      $("span#current-roll").text(newGame.activePlayer.dice.currentRoll);
+      if (newGame.activePlayer.isTurnOver() === true) {
         alert("Turn is over");
+        newGame.activePlayer.tempScore = 0;
+        $("span#round-total").text(newGame.activePlayer.tempScore);
       } else {
-        player1.addToTempScore (player1.dice.currentRoll);   
+        newGame.activePlayer.addToTempScore (newGame.activePlayer.dice.currentRoll);
+        $("span#round-total").text(newGame.activePlayer.tempScore);
       }
     } else {
       alert("Please Start Game First");
@@ -103,9 +108,8 @@ $(document).ready(function () {
   });
 
   $("button#hold").click(function () {
-
+    newGame.activePlayer.addToCurrentScore();
+    $("span#player-1-score").text(newGame.activePlayer.currentScore);
+    newGame.switchActivePlayer();
   });
-
-
-
 });
