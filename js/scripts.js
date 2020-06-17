@@ -50,7 +50,7 @@ function Dice (minNumber, maxNumber) {
   this.currentRole = 0;
 }
 
-Dice.prototype.rollDice () {
+Dice.prototype.rollDice = function() {
   return Math.floor(Math.random() * (this.maxNumber - this.minNumber +1)) + minNumber;
 }
 
