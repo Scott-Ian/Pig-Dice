@@ -31,12 +31,14 @@ _{Let people know what to do if they run into any issues or have questions, idea
 |  | Behavior | Input | Output | isComplete |
 |----|----|----|----|----|
 |1.| Program will generate a random number from 1-6 and store the value in a Dice Object| click "roll dice" button | 3 | _False_|
-|2.| Sample Behavior| Input| OUtput| _False_|
-
-Program wil add value of dice rolled into a variable...
-Program will evaluate if a "1" was rolled ....
-Program will prompt next player after a 1 is rolled
-Program will not allow a player to roll if it is not their turn
+|2.| Program wil add value of consecutive dice rolls into a player object variable of tempScore| 3, 6, 9| 18| _False_|
+|3.| Selecting Hold will add the tempScore variable to the player currentScore variable. | "Hold" click | Score: 22| _False_|
+|4.| Program will evaluate if a "1" was rolled| NA| N/A| _False_|
+|5.| Program will prompt next player after a 1 is rolled| N/A| N/A| _False_|
+|6.| Program will not allow a player to roll if it is not their turn, measured by a isTurn variable in the player object| "Roll" click| Not your turn| _False_|
+|7.| Program will assess whether a player's score is 100 or more, and then prompt winning event| "Hold" click| You've Won!| _False_|
+|8.| The program contains a reset/new Game button which will restart the program from initial state| "New Game" click| N/A| _False_|
+|9.| Sample Behavior| Input| OUtput| _False_|
 
 1. Play is clicked:
   Display the play space
