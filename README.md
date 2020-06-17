@@ -26,6 +26,54 @@ _{Are there issues that have not yet been resolved that you want to let users kn
 
 _{Let people know what to do if they run into any issues or have questions, ideas or concerns.  Encourage them to contact you or make a contribution to the code.}_
 
+## Specifications
+
+|  | Behavior | Input | Output | isComplete |
+|----|----|----|----|----|
+|1.| Program will generate a random number from 1-6 and store the value in a Dice Object| click "roll dice" button | 3 | _False_|
+|2.| Sample Behavior| Input| OUtput| _False_|
+
+Program wil add value of dice rolled into a variable...
+Program will evaluate if a "1" was rolled ....
+Program will prompt next player after a 1 is rolled
+Program will not allow a player to roll if it is not their turn
+
+1. Play is clicked:
+  Display the play space
+
+2. Objects needed:
+  1. Game Object
+    * 
+  2. Player Object
+    * isTurn
+    * current Score
+    * past rolls -optional
+  3. Dice Object
+    * Min-max numbers on dice
+    * Random roll method
+    * current roll
+
+3. Needed functions
+  * Round incrementor
+  * Random Dice Roller
+  * Check win state function
+  * Check for loose state function (rolled a 1?)
+  * Add  round total to score
+  * New Game Function
+  * Move to next player function
+
+4. User input data collection and display...
+  * Butons to hold, roll, new game
+  * Display: 
+    * Two columns for each player: 2 distinct play spaces each with own buttons, scores etc. 
+    * Possibly maintain middle column for user prompts, animations etc. 
+
+
+
+
+
+|1.| Sample Behavior| Input| OUtput| _False_|
+
 ## Technologies Used
 
 _{Tell me about the languages and tools you used to create this app. Assume that I know you probably used HTML and CSS. If you did something really cool using only HTML, point that out.}_
