@@ -26,12 +26,15 @@ Game.prototype.switchActivePlayer = function() {
 }
 
 // we are updating only activeplayer and then saving those instances to player 1 or 2
-Game.prototype.winStateCheck = function(playerScore){
-  return true;
+Game.prototype.winStateCheck = function() {
+  if (this.activePlayer.currentScore >= 100) {
+    return true;
+  }
 }
 
 // Player Object and Prototypes Start Hhere
-function Player() {
+function Player(name) {
+  this.name = name;
   this.isTurn = false;
   this.tempScore = 0;
   this.currentScore = 0;
@@ -40,10 +43,6 @@ function Player() {
 
 Player.prototype.tempScoreCheck = function() {
   return this.tempScore;
-}
-
-Player.prototype.currentScoreCheck = function () {
-  return this.currentScore;
 }
 
 Player.prototype.addToTempScore = function (number) {
@@ -83,15 +82,20 @@ function switchCurrentPlayerDisplay(newGame) {
   }
 }
 
+function winStateEngage(newGame) {
+  $("#winner-space").show();
+  $("span#winner-name").text(newGame.activePlayer.name);
+  document.getElementById("hold").disabled = true;
+  document.getElementById("roll").disabled = true;
+}
+
 $(document).ready(function() {
   let gameStart = false;
-  let player1;
-  let player2;
   let newGame;
   
   $("button#start").click(function() {
-    player1 = new Player ();
-    player2 = new Player ();
+    let player1 = new Player ("Player 1");
+    let player2 = new Player ("Player 2");
     newGame = new Game(player1, player2);
     gameStart = true;
     newGame.switchActivePlayer();
@@ -101,10 +105,11 @@ $(document).ready(function() {
 
   $("button#roll").click(function() {
     if (gameStart === true) {
+      $("#rolled-one").hide();
       newGame.activePlayer.dice.currentRoll = newGame.activePlayer.dice.rollDice();
       $("span#current-roll").text(newGame.activePlayer.dice.currentRoll);
       if (newGame.activePlayer.isTurnOver() === true) {
-        alert("Turn is over");
+        $("#rolled-one").show();
         newGame.activePlayer.tempScore = 0;
         $("span#round-total").text(newGame.activePlayer.tempScore);
         newGame.switchActivePlayer();
@@ -113,23 +118,24 @@ $(document).ready(function() {
         newGame.activePlayer.addToTempScore (newGame.activePlayer.dice.currentRoll);
         $("span#round-total").text(newGame.activePlayer.tempScore);
       }
-    } else {
-      alert("Please Start Game First");
     }
   });
   
   $("button#hold").click(function () {
     if (newGame.activePlayer.tempScore != 0) {
       newGame.activePlayer.addToCurrentScore();
-      if (newGame.player1.isTurn === true) {
-        $("span#player-1-score").text(newGame.activePlayer.currentScore);
-        newGame.switchActivePlayer();
-        switchCurrentPlayerDisplay(newGame);
-      } else {
-        $("span#player-2-score").text(newGame.activePlayer.currentScore);
-        newGame.switchActivePlayer();
-        switchCurrentPlayerDisplay(newGame);
+      if (newGame.winStateCheck() === true) {
+        winStateEngage(newGame);
       }
+        if (newGame.player1.isTurn === true) {
+          $("span#player-1-score").text(newGame.activePlayer.currentScore);
+          newGame.switchActivePlayer();
+          switchCurrentPlayerDisplay(newGame);
+        } else {
+          $("span#player-2-score").text(newGame.activePlayer.currentScore);
+          newGame.switchActivePlayer();
+          switchCurrentPlayerDisplay(newGame);
+        }
     }
   });
   
@@ -140,9 +146,5 @@ $(document).ready(function() {
 
 // To-DO list
 
-//2. Make sure we update scores when necessary
-//2. Add in victory/win state conditions
-//4. Display win Statements upon victory
-//5. Remove Alerts and replace with warning messages
 //6. Overhaul UI
     // Visual cue for whose turn it is

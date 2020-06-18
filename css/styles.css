@@ -9,3 +9,11 @@
 #play-space {
   display: none;
 }
+
+#winner-space {
+  display: none;
+}
+
+#rolled-one {
+  display: none;
+}
