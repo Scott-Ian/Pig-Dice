@@ -74,9 +74,15 @@ Dice.prototype.rollDice = function() {
   return Math.floor(Math.random() * (this.maxNumber - this.minNumber +1)) + this.minNumber;
 }
 
-// Business Logic Functions Start Here
-
 // UI Logic
+function switchCurrentPlayerDisplay(newGame) {
+  if (newGame.player1.isTurn === true) {
+    $("span#current-player").text("Player 1");
+  } else {
+    $("span#current-player").text("Player 2");
+  }
+}
+
 $(document).ready(function() {
   let gameStart = false;
   let player1;
@@ -89,6 +95,7 @@ $(document).ready(function() {
     newGame = new Game(player1, player2);
     gameStart = true;
     newGame.switchActivePlayer();
+    switchCurrentPlayerDisplay(newGame);
     $("#play-space").show();
   })
 
@@ -101,6 +108,7 @@ $(document).ready(function() {
         newGame.activePlayer.tempScore = 0;
         $("span#round-total").text(newGame.activePlayer.tempScore);
         newGame.switchActivePlayer();
+        switchCurrentPlayerDisplay(newGame);
       } else {
         newGame.activePlayer.addToTempScore (newGame.activePlayer.dice.currentRoll);
         $("span#round-total").text(newGame.activePlayer.tempScore);
@@ -116,9 +124,11 @@ $(document).ready(function() {
       if (newGame.player1.isTurn === true) {
         $("span#player-1-score").text(newGame.activePlayer.currentScore);
         newGame.switchActivePlayer();
+        switchCurrentPlayerDisplay(newGame);
       } else {
         $("span#player-2-score").text(newGame.activePlayer.currentScore);
         newGame.switchActivePlayer();
+        switchCurrentPlayerDisplay(newGame);
       }
     }
   });
