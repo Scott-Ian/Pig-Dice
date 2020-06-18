@@ -1,14 +1,16 @@
 body {
-  background-color: plum;
+  background-color: rgb(221, 160, 221);
+  background-image: url(/img/piggyBackground.jpg)
 }
 
 .jumbotron {
   text-align: center;
-  background-color: pink;
+  background-color: rgb(255, 194, 204);
 }
 
 .container {
   text-align: center;
+  position: relative;
 }
 
 #console {
@@ -44,4 +46,6 @@ body {
 
 .player-space {
   border-style: ridge;
+  font-weight: bold;
+  background-color: pink;
 }

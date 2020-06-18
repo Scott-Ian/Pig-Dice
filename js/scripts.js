@@ -143,8 +143,3 @@ $(document).ready(function() {
     location.reload();
   });
 });
-
-// To-DO list
-
-//6. Overhaul UI
-    // Visual cue for whose turn it is
