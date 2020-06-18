@@ -8,12 +8,14 @@ function Game(player1, player2) {
 }
 
 Game.prototype.switchActivePlayer = function() {
-  if (this.player1.isTurn === true) {
+  if (this.player1.isTurn === true) { // this is to take whose turn it is NOW and switch
     this.player1.isTurn = false;
-    this.player1 = this.activePlayer;
-    this.activePlayer = this.player2;
+    this.player2.isTurn = true;
+    this.player1 = this.activePlayer; // updates player 1 with activePlayer object updates
+    this.activePlayer = this.player2; //sets active player to player2 object
   } else if (this.player2.isTurn === true) {
     this.player2.isTurn = false;
+    this.player1.isTurn = true;
     this.player2 = this.activePlayer;
     this.activePlayer = this.player1;
   }
@@ -23,15 +25,16 @@ Game.prototype.switchActivePlayer = function() {
   }
 }
 
+// we are updating only activeplayer and then saving those instances to player 1 or 2
 Game.prototype.winStateCheck = function(playerScore){
   return true;
 }
 
 // Player Object and Prototypes Start Hhere
-function Player(isTurn, tempScore, currentScore) {
-  this.isTurn = isTurn;
-  this.tempScore = tempScore;
-  this.currentScore = currentScore;
+function Player() {
+  this.isTurn = false;
+  this.tempScore = 0;
+  this.currentScore = 0;
   this.dice = new Dice (1, 6);
 }
 
@@ -81,8 +84,8 @@ $(document).ready(function() {
   let newGame;
   
   $("button#start").click(function() {
-    player1 = new Player (false, 0, 0)
-    player2 = new Player (false, 0, 0)
+    player1 = new Player ();
+    player2 = new Player ();
     newGame = new Game(player1, player2);
     gameStart = true;
     newGame.switchActivePlayer();
