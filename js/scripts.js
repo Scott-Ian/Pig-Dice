@@ -5,6 +5,7 @@ function Game(player1, player2) {
   this.player1 = player1;
   this.player2 = player2;
   this.activePlayer;
+  this.gameStart = false;
 }
 
 Game.prototype.switchActivePlayer = function() {
@@ -89,54 +90,85 @@ function winStateEngage(newGame) {
   document.getElementById("roll").disabled = true;
 }
 
+function ivanPlay (newGame) {
+    while (newGame.activePlayer.name === "Ivan" && newGame.activePlayer.tempScore < 20) {
+      buttonRoll(newGame);
+    }
+    if (newGame.activePlayer.name === "Ivan" && newGame.activePlayer.tempScore >= 20)
+      buttonHold(newGame);
+}
+
+function buttonRoll (newGame) {
+  if (newGame.gameStart === true) {
+    $("#rolled-one").hide();
+    newGame.activePlayer.dice.currentRoll = newGame.activePlayer.dice.rollDice();
+    $("span#current-roll").text(newGame.activePlayer.dice.currentRoll);
+    if (newGame.activePlayer.isTurnOver() === true) {
+      $("#rolled-one").show();
+      newGame.activePlayer.tempScore = 0;
+      $("span#round-total").text(newGame.activePlayer.tempScore);
+      newGame.switchActivePlayer();
+      switchCurrentPlayerDisplay(newGame);
+      ivanPlay(newGame);
+    } else {
+      newGame.activePlayer.addToTempScore (newGame.activePlayer.dice.currentRoll);
+      $("span#round-total").text(newGame.activePlayer.tempScore);
+    }
+  }
+}
+
+function buttonHold (newGame) {
+  if (newGame.activePlayer.tempScore != 0) {
+    newGame.activePlayer.addToCurrentScore();
+    if (newGame.winStateCheck() === true) {
+      winStateEngage(newGame);
+    }
+      if (newGame.player1.isTurn === true) {
+        $("span#player-1-score").text(newGame.activePlayer.currentScore);
+        newGame.switchActivePlayer();
+        switchCurrentPlayerDisplay(newGame);
+        ivanPlay(newGame);
+      } else {
+        $("span#player-2-score").text(newGame.activePlayer.currentScore);
+        newGame.switchActivePlayer();
+        switchCurrentPlayerDisplay(newGame);
+        ivanPlay(newGame);
+      }
+  }
+}
+
 $(document).ready(function() {
-  let gameStart = false;
   let newGame;
   
   $("button#start").click(function() {
     let player1 = new Player ("Player 1");
     let player2 = new Player ("Player 2");
     newGame = new Game(player1, player2);
-    gameStart = true;
+    newGame.gameStart = true;
     newGame.switchActivePlayer();
     switchCurrentPlayerDisplay(newGame);
     $("#play-space").show();
   })
 
-  $("button#roll").click(function() {
-    if (gameStart === true) {
-      $("#rolled-one").hide();
-      newGame.activePlayer.dice.currentRoll = newGame.activePlayer.dice.rollDice();
-      $("span#current-roll").text(newGame.activePlayer.dice.currentRoll);
-      if (newGame.activePlayer.isTurnOver() === true) {
-        $("#rolled-one").show();
-        newGame.activePlayer.tempScore = 0;
-        $("span#round-total").text(newGame.activePlayer.tempScore);
-        newGame.switchActivePlayer();
-        switchCurrentPlayerDisplay(newGame);
+  $("button#ivan-play").click(function() {
+    if (newGame.gameStart === true) {
+      if (newGame.player2.name === "Ivan") {
+        newGame.player2.name = "Player 2";
+        $(this).html("Invite Ivan to Play");
       } else {
-        newGame.activePlayer.addToTempScore (newGame.activePlayer.dice.currentRoll);
-        $("span#round-total").text(newGame.activePlayer.tempScore);
+        newGame.player2.name = "Ivan";
+        $(this).html("No more Ivan!");
+        ivanPlay(newGame);
       }
     }
   });
+
+  $("button#roll").click(function() {
+    buttonRoll(newGame);
+  });
   
   $("button#hold").click(function () {
-    if (newGame.activePlayer.tempScore != 0) {
-      newGame.activePlayer.addToCurrentScore();
-      if (newGame.winStateCheck() === true) {
-        winStateEngage(newGame);
-      }
-        if (newGame.player1.isTurn === true) {
-          $("span#player-1-score").text(newGame.activePlayer.currentScore);
-          newGame.switchActivePlayer();
-          switchCurrentPlayerDisplay(newGame);
-        } else {
-          $("span#player-2-score").text(newGame.activePlayer.currentScore);
-          newGame.switchActivePlayer();
-          switchCurrentPlayerDisplay(newGame);
-        }
-    }
+    buttonHold(newGame);
   });
   
   $("button#reset").click(function() {
